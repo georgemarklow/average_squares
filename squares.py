@@ -1,6 +1,5 @@
 """Computation of weighted average of squares."""
 
-
 def average_of_squares(list_of_numbers, list_of_weights=None):
     """ Return the weighted average of a list of values.
     
@@ -18,18 +17,14 @@ def average_of_squares(list_of_numbers, list_of_weights=None):
     AssertionError: weights and numbers must have same length
 
     """
-    if list_of_weights is not None:
-        assert len(list_of_weights) == len(list_of_numbers), \
-            "weights and numbers must have same length"
-        effective_weights = list_of_weights
-    else:
-        effective_weights = [1] * len(list_of_numbers)
-    squares = [
-        weight * number * number
-        for number, weight
-        in zip(list_of_numbers, effective_weights)
-    ]
-    return sum(squares)
+    squares = [i ** 2 for i in list_of_numbers]
+
+    if list_of_weights is None:
+        return sum(squares) / len(squares)
+
+    assert len(list_of_weights) == len(list_of_numbers), "weights and numbers must have same length"
+    weighted_squares = [a * b for a,b in zip(squares, list_of_weights)]
+    return sum(weighted_squares) / len(weighted_squares)
 
 
 def convert_numbers(list_of_strings):
@@ -38,16 +33,16 @@ def convert_numbers(list_of_strings):
     Example:
     --------
     >>> convert_numbers(["4", " 8 ", "15 16", " 23    42 "])
-    [4, 8, 15, 16]
+    [4, 8, 15, 16, 23, 42]
 
     """
     all_numbers = []
     for s in list_of_strings:
-        # Take each string in the list, split it into substrings separated by
-        # whitespace, and collect them into a single list...
-        all_numbers.extend([token.strip() for token in s.split()])
-    # ...then convert each substring into a number
-    return [float(number_string) for number_string in all_numbers]
+        parts = [s1 for s1 in s.split()]
+        for i in parts:
+            all_numbers.append(int(i))
+
+    return all_numbers
 
 
 if __name__ == "__main__":
